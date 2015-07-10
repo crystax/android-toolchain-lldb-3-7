@@ -28,6 +28,7 @@
 #include <sstream>
 #include <vector>
 
+#if !defined(LLDB_EDITLINE_USE_WCHAR)
 // components needed to handle wide characters ( <codecvt>, codecvt_utf8, libedit built with '--enable-widec' )
 // are not consistenly available on non-OSX platforms.  The wchar_t versions of libedit functions will only be
 // used in cases where this is true.  This is a compile time dependecy, for now selected per target Platform
@@ -36,6 +37,7 @@
 #include <codecvt>
 #else
 #define LLDB_EDITLINE_USE_WCHAR 0
+#endif
 #endif
 
 #include "lldb/lldb-private.h"
