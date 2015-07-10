@@ -20,6 +20,11 @@ endef
 $(eval $(call DIR_SOURCES,common))
 
 ifeq ($(HOST_OS),Darwin)
+
+ifneq (,$(strip $(OBJCXX)))
+override CXX := $(OBJCXX)
+endif
+
 $(eval $(call DIR_SOURCES,posix))
 $(eval $(call DIR_SOURCES,macosx))
 endif
