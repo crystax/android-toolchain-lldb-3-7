@@ -22,6 +22,8 @@
 #include <string.h>
 #include <fstream>
 
+#include <limits.h> // For PATH_MAX
+
 #include "lldb/Host/Config.h" // Have to include this before we test the define...
 #ifdef LLDB_CONFIG_TILDE_RESOLVES_TO_USER
 #include <pwd.h>
