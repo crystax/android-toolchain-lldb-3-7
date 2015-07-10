@@ -14,6 +14,11 @@
 #include "llvm/ADT/SmallVector.h"
 
 #include <pthread.h>
+#include <dlfcn.h>
+
+typedef int (*pthread_setname_np_t)(pthread_t , const char *);
+static bool pthread_setname_np_initialized = false;
+static pthread_setname_np_t pthread_setname_np_func = 0;
 
 using namespace lldb_private;
 
@@ -30,7 +35,17 @@ HostThreadLinux::HostThreadLinux(lldb::thread_t thread)
 void
 HostThreadLinux::SetName(lldb::thread_t thread, llvm::StringRef name)
 {
-    ::pthread_setname_np(thread, name.data());
+    // We don't fear race conditions here. Even if two threads will do the same job simultaneously,
+    // it will not break logic, since both will set the same variable twice with the same value
+    if (!pthread_setname_np_initialized)
+    {
+        void *pc = ::dlopen(NULL, RTLD_LAZY);
+        pthread_setname_np_func = (pthread_setname_np_t)::dlsym(pc, "pthread_setname_np");
+        ::dlclose(pc);
+        pthread_setname_np_initialized = true;
+    }
+    if (pthread_setname_np_func)
+        pthread_setname_np_func(thread, name.data());
 }
 
 void
