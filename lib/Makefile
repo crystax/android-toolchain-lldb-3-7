@@ -159,7 +159,7 @@ ifeq ($(HOST_OS),Darwin)
                            -Wl,-compatibility_version -Wl,1
     endif
     # extra options to override libtool defaults
-	LLVMLibsOptions += -F/System/Library/Frameworks -F/System/Library/PrivateFrameworks
+	LLVMLibsOptions += -F$(LLDBSDKROOT)/System/Library/Frameworks -F$(LLDBSDKROOT)/System/Library/PrivateFrameworks
 	LLVMLibsOptions += -framework Foundation -framework CoreFoundation
 	LLVMLibsOptions += -framework CoreServices -framework Carbon -framework Security
 	LLVMLibsOptions += -framework DebugSymbols $(PYTHON_BUILD_FLAGS) -lobjc
