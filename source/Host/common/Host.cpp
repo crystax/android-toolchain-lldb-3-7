@@ -75,11 +75,29 @@
 #define _POSIX_SPAWN_DISABLE_ASLR       0x0100
 #endif
 
-extern "C"
+#if defined(__APPLE__)
+
+#include <sys/syscall.h>
+
+#ifndef SYS___pthread_chdir
+#define SYS___pthread_chdir 348
+#endif
+
+#ifndef SYS___pthread_fchdir
+#define SYS___pthread_fchdir 349
+#endif
+
+static int __pthread_chdir(const char *path)
 {
-    int __pthread_chdir(const char *path);
-    int __pthread_fchdir (int fildes);
+    return ::syscall(SYS___pthread_chdir, path);
 }
+
+static int __pthread_fchdir(int fildes)
+{
+    return ::syscall(SYS___pthread_fchdir, fildes);
+}
+
+#endif
 
 #endif
 
