@@ -17,8 +17,10 @@ ifneq (,$(strip $(filter $(HOST_OS), FreeBSD Linux GNU/kFreeBSD)))
 DIRS += lldb-server
 endif
 
+ifeq ($(LLDB_ENABLE_DEBUGSERVER),1)
 ifeq ($(HOST_OS),Darwin)
 DIRS += debugserver
+endif
 endif
 
 ifeq ($(ENABLE_WERROR),0)
